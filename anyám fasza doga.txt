@@ -1,0 +1,139 @@
+*** Settings ***
+Library    SeleniumLibrary
+*** Variables ***  
+${BROWSER}                                 chrome
+${URL}                                     https://alienregistry.azurewebsites.net/
+${WELCOMETEXT}                             //div[@class='container']/main/div/h1
+${ALIENS}                                  //*[@id="Aliens"]  
+${ALIENSTEXT}                              //div[@class='container']/main/h1  
+${HOME}                                    //*[@id="Home"]  
+${PRIVACY}                                 //*[@id="Privacy"]  
+${PRIVACYTEXT}                             //div[@class='container']/main/h1   
+${CREATENEW}                               //*[@id="CreateNew"] 
+${CREATENAME}                              //*[@id="Name"] 
+${CREATEPLANET}                            //*[@id="Planet"] 
+${CREATEPOPULATION}                        //*[@id="Population"] 
+${CREATEATTITUDE}                          //*[@id="Attitude"] 
+${CREATECREATE}                            //*[@id="Create"] 
+${NAME}                                       Dagnier         
+${PLANET}                                     Shuhlid
+${POPULATION}                                 9500000   
+${NEWPOPULATION}                              6600000   
+${ATTITUDE}                                   Open  
+${LISTNAME}                                //*[@id="Dagnierid"]/td[1]
+${LISTPLANET}                              //*[@id="Dagnierid"]/td[2]
+${LISTPOPULATION}                          //*[@id="Dagnierid"]/td[3]
+${LISTATTITUDE}                            //*[@id="Dagnierid"]/td[4]
+${LISTEDIT}                                //*[@id="Dagnierid"]/td[5]/a[1]
+${LISTDELETE}                              //*[@id="Dagnierid"]/td[5]/a[3]
+${EDITNAME}                                //*[@id="Name"] 
+${EDITPLANET}                              //*[@id="Planet"] 
+${EDITPOPULATION}                          //*[@id="Population"] 
+${EDITATTITUDE}                            //*[@id="Attitude"] 
+${EDITSAVE}                                //*[@id="Save"] 
+${EDITBACKTOLIST}                          //*[@id="BackToList"] 
+${DELETEDELETE}                            //*[@id="Delete"] 
+${LOGIN}                                   //*[@id="Login"] 
+${LOGINEMAIL}                              //*[@id="Input_Email"] 
+${LOGINPASSWORD}                           //*[@id="Input_Password"] 
+${LOGINBUTTON}                             //*[@id="login-submit"] 
+${LOGOUTBUTTON}                            //*[@id="Logout"]/button[1] 
+${HELLO}                                   //*[@id="Hello"] 
+${EMAIL}                                   nikolettviola19@gmail.com
+${PASSWORD}                                Szarfos33@
+${HELLO_EMAIL}                             hello nikolettviola19com !
+
+*** Test Cases ***
+Alien
+    Open Webpage
+    Welcome check
+    Check Header
+    Login
+    Alien Create
+    Alien Check
+    Alien Edit
+    Check With New Population
+    Delete New Alien
+    Logout
+
+*** Keywords *** 
+Open Webpage
+    Open Browser    ${URL}    ${BROWSER}
+    Maximize Browser Window
+Welcome check
+    Wait Until Element Is Visible    ${WELCOMETEXT}
+    Element Should Contain           ${WELCOMETEXT}    ${WELCOME}    
+Check Header
+    Wait Until Element Is Visible    ${ALIENS}  
+    Click Element                    ${ALIENS}
+    Element Should Contain           ${ALIENSTEXT} Idex
+    Wait Until Element Is Visible    ${HOME}
+    Click Element                    ${HOME}
+    Welcome check
+    Wait Until Element Is Visible    ${PRIVACY}
+    Click Element                    ${PRIVACY}
+    Wait Until Element Is Visible    ${PRIVACYTEXT}
+    Element Should Contain           ${PRIVACYTEXT} Privacy Policy
+Login 
+Wait Until Element Is Visible        ${LOGIN}
+Click Element                        ${LOGIN}
+Wait Until Element Is Visible        ${LOGINEMALIL} 
+Click Element                        ${LOGINEMAIL}
+Input Text                           ${LOGINEMAIL}    ${EMAIL} true
+Wait Until Element Is Visible        ${LOGINPASSWORD}
+Click Element                        ${LOGINPASSWORD}
+Input Text                           ${LOGINEMAIL}    ${LOGINPASSWORD} true
+Wait Until Element Is Visible        ${LOGINBUTTON}
+Click Element                        ${LOGINBUTTON}
+Wait Until Element Is Visible        ${HELLO}
+Page Should Contain                  ${HELLO_EMAIL}
+
+Alien Create
+Wait Until Element Is Visible  ${ALIENS}  
+Click element                  ${ALIENS}
+Wait Until Element Is Visible  ${CREATENEW}  
+Click element                  ${CREATENEW}
+Wait Until Element Is Visible  ${CREATENAME}  
+Click element                  ${CREATENAME}
+Input Text                     ${CREATENAME}    ${NAME}
+Wait Until Element Is Visible  ${CREATEPLANET}  
+Click element                  ${CREATEPLANET}
+Input Text                     ${CREATEPLANET}    ${PLANET}
+
+Wait Until Element Is Visible  ${CREATEATTITUDE}  
+Click element                  ${CREATEATTITUDE}
+Input Text                     ${CREATEATTITUDE}    ${ATTITUDE}
+
+Alien Check
+Wait Until Element Is Visible  ${CREATECREATE}
+Click Element                  ${CREATECREATE}
+Should Contain                 ${LISTNAME}    ${NAME}
+Should Contain                 ${LISTPLANET}    ${PLANET}
+Should Contain                 ${LISTPOPULATION}    ${POPULATION}
+Should Contain                 ${LISTATTITUDE}    ${ATTITUDE}
+
+Alien Edit
+Wait Until Element Is Visible  ${LISTEDIT}
+Click Element                  ${LISTEDIT}
+Wait Until Element Is Visible  ${EDITPOPULATION}
+Click Element                  ${EDITPOPULATION}
+Input Text                     ${EDITPOPULATION}    ${NEWPOPULATION}
+Wait Until Element Is Visible  ${EDITSAVE}
+Click Element                  ${EDITSAVE}
+
+Check With New Population
+Should Contain                 ${LISTNAME}    ${NAME}
+Should Contain                 ${LISTPLANET}    ${PLANET}
+Should Contain                 ${LISTPOPULATION}    ${POPULATION}
+Should Contain                 ${LISTATTITUDE}    ${ATTITUDE}
+
+Delete New Alien
+Wait Until Element Is Visible  ${LISTDELETE}
+Click Element                  ${LISTDELETE}
+Wait Until Element Is Visible  ${DELETEDELETE}
+Click Element                  ${DELETEDELETE}
+
+Logout
+Wait Until Element Is Visible  ${LOGOUTBUTTON}
+Click Element                  ${LOGOUTBUTTON}
+Close Browser
